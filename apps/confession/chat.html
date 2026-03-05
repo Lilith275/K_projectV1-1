@@ -15,33 +15,33 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         html, body {
-            position: fixed;
-            width: 100vw;
-            height: 100dvh;
-            margin: 0; padding: 0;
-            overflow: hidden;
-            background: #fff5f7;
-        }
-
+          position: fixed;
+    width: 100vw;
+    height: 100dvh; /* 使用 dvh 适配全屏 */
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
         /* --- 顶部 Header 窄化优化版 --- */
       .header {
-    /* 1. 核心修复：这里不再加任何 +15px，直接用原生的安全区高度 */
-    padding-top: env(safe-area-inset-top) !important; 
-    
-    /* 2. 核心修复：底部内边距缩减到极小，消灭“宽”的根源 */
-    padding-bottom: 5px !important; 
+    /* 核心：只给安全区高度，不再给任何额外的 padding-top */
+    padding-top: env(safe-area-inset-top) !important;
+    padding-bottom: 2px !important; /* 极窄 */
     
     width: 100%;
+    height: auto; /* 让它根据内容自适应，但不被拉伸 */
+    min-height: calc(env(safe-area-inset-top) + 40px); /* 设定一个最小窄高度 */
+    
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: transparent; 
+    
+    background: rgba(255, 255, 255, 0.1); 
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     z-index: 999;
-    flex-shrink: 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0; /* 严禁被拉宽 */
 }
        .name { 
     /* 3. 紧贴安全区边界，不给额外 margin */
@@ -67,7 +67,7 @@
 }
         /* --- 以下部分严格保持原样，禁止任何逻辑修改 --- */
         .phone {
-            position: fixed;
+            position: relative;
             top: 0;
             left: 0;
             width: 100vw !important;
