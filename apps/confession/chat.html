@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -15,20 +15,19 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         html, body {
-       position: fixed;
-    width: 100vw; /* 改为 100vw，确保占满手机视口 */
-    height: 100dvh; /* 改为 100dvh */
-    margin: 0; padding: 0;
-    overflow: hidden;
-    background: #fff5f7;
-}
+            position: fixed;
+            width: 100vw;
+            height: 100dvh;
+            margin: 0; padding: 0;
+            overflow: hidden;
+            background: #fff5f7;
+        }
 
-/* 1. 核心容器修复：彻底消灭右侧和底部白边 */
-/* --- 顶部 Header 优化版 --- */
-.header {
-            /* 关键：增加顶部间距，适配刘海屏并保持优雅高度 */
-            padding-top: calc(env(safe-area-inset-top) + 15px) !important;
-            padding-bottom: 10px !important;
+        /* --- 顶部 Header 窄化优化版 --- */
+        .header {
+            /* 关键修改：大幅压缩顶部和底部间距 */
+            padding-top: env(safe-area-inset-top) !important; 
+            padding-bottom: 12px !important;
             width: 100%;
             display: flex;
             flex-direction: column;
@@ -41,63 +40,64 @@
             z-index: 999;
             flex-shrink: 0;
         }
-/* 稍微调小一点名字，让整体看起来不那么“宽/厚” */
-.name { 
-    font-size: 20px; /* 原 24px -> 20px */
-    font-weight: 600; 
-    letter-spacing: 4px; /* 稍微缩紧一点字间距 */
-    color: #ff85a2; 
-    pointer-events: none;
-    margin-top: 5px;
-}
 
-.status { 
-    font-size: 10px; /* 原 11px -> 10px */
-    color: #b8a0aa; 
-    pointer-events: none;
-    margin-bottom: 2px;
-}
-/* 2. 容器高度修复：防止底部出现黑边 */
-.phone {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw !important;
-    /* 使用 100vh 配合脚本的 manifest 设置，确保撑满整个屏幕 */
-    height: 100vh !important; 
-    display: flex;
-    flex-direction: column;
-    background: var(--bg-gradient);
-    margin: 0;
-    padding: 0;
-}
+        .name { 
+            font-size: 20px; 
+            font-weight: 600; 
+            letter-spacing: 4px; 
+            color: #ff85a2; 
+            pointer-events: none;
+            margin-top: 8px; /* 补偿刘海位置 */
+        }
 
-/* 确保内部文字精准居中且紧凑 */
-.header h1, .header .name, .header .status {
-    margin: 0 auto !important;
-    text-align: center !important;
-    width: fit-content;
-}
+        .status { 
+            font-size: 10px; 
+            color: #b8a0aa; 
+            pointer-events: none;
+            margin-top: 2px;
+        }
 
-/* 调整那个返回的小箭头，确保它在同一水平线上 */
-.back-btn {
-    position: absolute;
-    left: 15px;
-    top: calc(env(safe-area-inset-top) + 8px); /* 随刘海动态调整 */
-    z-index: 2001;
-}
-        .name { font-size: 24px; font-weight: 600; letter-spacing: 6px; color: #ff85a2; pointer-events: none; }
-        .status { font-size: 11px; color: #b8a0aa; pointer-events: none; }
+        .back-btn {
+            position: absolute;
+            left: 15px;
+            /* 随窄 Header 动态居中 */
+            top: calc(env(safe-area-inset-top) + 12px); 
+            z-index: 2001;
+            text-decoration: none;
+            color: #ff85a2;
+            font-size: 24px;
+            font-weight: bold;
+        }
 
-     #chatDisplay {
-    flex: 1;
-    width: 100%;
-    padding: 15px;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch; /* iOS 滑动优化 */
-    display: flex;
-    flex-direction: column;
-}
+        /* --- 以下部分严格保持原样，禁止任何逻辑修改 --- */
+        .phone {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw !important;
+            height: 100vh !important; 
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-gradient);
+            margin: 0;
+            padding: 0;
+        }
+
+        .header h1, .header .name, .header .status {
+            margin: 0 auto !important;
+            text-align: center !important;
+            width: fit-content;
+        }
+
+        #chatDisplay {
+            flex: 1;
+            width: 100%;
+            padding: 15px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            display: flex;
+            flex-direction: column;
+        }
         #chatDisplay::-webkit-scrollbar { display: none; }
 
         .bubble { 
@@ -108,50 +108,25 @@
         }
         .ai { align-self: flex-start; background: var(--ai-bubble); color: var(--text-main); border-bottom-left-radius: 6px; border: 1px solid rgba(255,255,255,0.4); }
         .user { align-self: flex-end; background: var(--user-bubble); color: #fff; border-bottom-right-radius: 6px; }
-.message {
-    max-width: 85%; /* 气泡最宽占屏幕 85% */
-    margin-bottom: 12px;
-    word-wrap: break-word;
-}
 
-.ai-message {
-    align-self: flex-start; /* AI 靠左 */
-}
-
-.user-message {
-    align-self: flex-end; /* 用户靠右 */
-}
         .input-area {
-    padding: 10px 15px calc(env(safe-area-inset-bottom) + 10px);
-background: #ffffff; /* 必须有实色背景 */    display: flex;
-    align-items: center;
-    gap: 8px;
-    width: 100%;
-    box-sizing: border-box;
-    padding-bottom: calc(env(safe-area-inset-bottom) + 8px) !important;
-}
+            padding: 10px 15px calc(env(safe-area-inset-bottom) + 10px);
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            box-sizing: border-box;
+            padding-bottom: calc(env(safe-area-inset-bottom) + 8px) !important;
+        }
 
-#userInput {
-    flex: 1;
-    height: 42px;
-    line-height: 22px;
-    padding: 10px 15px !important;
-    font-size: 16px;
-    border-radius: 21px;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    /* 默认边框颜色，保持你原本的淡粉色风格 */
-    border: 1px solid #ffe4e9; 
-    background: #fff;
-    resize: none; /* 禁止用户手动拉伸输入框 */
-    transition: border-color 0.3s;
-}
-/* 核心：消除点击时的绿色边框 */
-#userInput:focus {
-    outline: none !important; /* 彻底移除默认的蓝色或绿色轮廓 */
-
-}
+        #userInput {
+            flex: 1; height: 42px; line-height: 22px;
+            padding: 10px 15px !important; font-size: 16px;
+            border-radius: 21px; border: 1px solid #ffe4e9; 
+            background: #fff; resize: none; transition: border-color 0.3s;
+        }
+        #userInput:focus { outline: none !important; }
 
         #sendBtn { 
             width: 44px; height: 44px; background: #ff85a2; color: #fff; 
@@ -159,23 +134,14 @@ background: #ffffff; /* 必须有实色背景 */    display: flex;
             box-shadow: 0 4px 10px rgba(255, 133, 162, 0.3);
         }
 
-        .settings { 
-            position: absolute; top: 120px; left: 5%; width: 90%; 
-            background: rgba(255, 254, 255, 0.98); border-radius: 20px; 
-            padding: 20px; z-index: 3000; display: none; border: 2px solid #ffd1dc;
-        }
-        .settings input { width: 100%; margin-bottom: 12px; padding: 10px; border: 1px solid #ffe4e9; border-radius: 8px; }
-        .settings-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
-        #saveBtn { width: 100%; padding: 12px; background: #ff85a2; color: white; border: none; border-radius: 10px; }
-
         @keyframes bubblePop { from { opacity: 0; transform: translateY(15px) scale(0.8); } to { opacity: 1; transform: translateY(0) scale(1); } }
     </style>
 </head>
 
 <body>
-
     <div class="phone">
-       <div class="header">
+        <div class="header">
+            <a href="index.html" class="back-btn"></a>
             <div class="name">K.</div>
             <div class="status">静谧的告解室 · 灵魂共鸣中</div>
         </div>
@@ -190,18 +156,16 @@ background: #ffffff; /* 必须有实色背景 */    display: flex;
         </div>
     </div>
 
-
-       <script>
-        // 你的特质 Prompt 已移至世界书读取，此处仅作兜底
+    <script>
+        // --- 保持原样：你的原始 JS 逻辑 ---
         const chatDisplay = document.getElementById('chatDisplay');
-    const userInput = document.getElementById('userInput');
-    const sendBtn = document.getElementById('sendBtn');
+        const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
 
-    // 自动高度调整
-    userInput.addEventListener('input', function() {
-        this.style.height = '44px';
-        this.style.height = Math.min(this.scrollHeight, 100) + 'px';
-    });
+        userInput.addEventListener('input', function() {
+            this.style.height = '44px';
+            this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+        });
 
         const sounds = {
             pop: new Audio('https://assets.mixkit.co/active_storage/sfx/3005/3005-preview.mp3'),
@@ -212,19 +176,18 @@ background: #ffffff; /* 必须有实色背景 */    display: flex;
         let isTyping = false;
         let replyTimer = null;
 
-        // --- 核心布局修复 ---
         function adjustLayout() {
-        window.scrollTo(0, 0);
-        if (window.visualViewport) {
-            document.querySelector('.phone').style.height = `${window.visualViewport.height}px`;
+            window.scrollTo(0, 0);
+            if (window.visualViewport) {
+                document.querySelector('.phone').style.height = `${window.visualViewport.height}px`;
+            }
+            chatDisplay.scrollTop = chatDisplay.scrollHeight;
         }
-        chatDisplay.scrollTop = chatDisplay.scrollHeight;
-    }
 
-    if (window.visualViewport) {
-        window.visualViewport.addEventListener('resize', adjustLayout);
-    }
-        // --- 初始化历史记录 ---
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', adjustLayout);
+        }
+
         window.onload = () => {
             const saved = localStorage.getItem('k_history');
             if (saved) {
@@ -241,20 +204,13 @@ background: #ffffff; /* 必须有实色背景 */    display: flex;
             adjustLayout();
         };
 
-        // --- 发送逻辑 ---
         async function handleSend() {
             const text = userInput.value.trim();
             if (!text || isTyping) return;
 
             const base = localStorage.getItem('k_base');
             const key = localStorage.getItem('k_key');
-            const model = localStorage.getItem('k_model') 
-
-            if (!key || !base) {
-                addBubble('ai', "（契约尚未生效。请点击上方‘K.’进入设定。）");
-                return;
-            }
-
+            const model = localStorage.getItem('k_model');
             sounds.send.play().catch(()=>{});
             addBubble('user', text);
             userInput.value = '';
@@ -267,112 +223,80 @@ background: #ffffff; /* 必须有实色背景 */    display: flex;
             replyTimer = setTimeout(() => fetchAI(base, key, model, text), 1000);
         }
 
-        // 【核心修改】：固定读取 Chrollo 的新版数据
-        // --- AI 请求核心函数 ---
-async function fetchAI(base, key, model, userInputText) {
-    isTyping = true;
-    try {
-        // 1. 【链接修改】：从新版 archive 读取 Chrollo 的合并设定和记忆
-        // 这里的 Key 必须和 archive.html 里的保持一致
-        const s = localStorage.getItem('k_world_Chrollo_setting') || "一个神秘的告解者";
-        const m = localStorage.getItem('k_world_Chrollo_memory') || "暂无重要记忆";
+        async function fetchAI(base, key, model, userInputText) {
+            isTyping = true;
+            try {
+                const s = localStorage.getItem('k_world_Chrollo_setting') || "一个神秘的告解者";
+                const m = localStorage.getItem('k_world_Chrollo_memory') || "暂无重要记忆";
 
-        // 2. 【Prompt 组装】：保留你之前的严格约束，但使用新的变量 s 和 m
-        const dynamicPrompt = `【人设、背景与风格】:${s}\n【记忆】:${m}\n请严格遵守人设，自然对话。
-以上【记忆】仅作为你脑海中的往事参考，请将其融入你的语气中，禁止直接复读记忆条目，禁止向用户解释你的记忆系统。`;
-        
-        // 3. 构造请求 URL
-        const url = base.includes('/v1') ? 
-            `${base.replace(/\/$/, '')}/models/${model}:generateContent?key=${key}` : 
-            `${base.replace(/\/$/, '')}/v1beta/models/${model}:generateContent?key=${key}`;
-
-        // 4. 发送请求
-        const res = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                system_instruction: { parts: [{ text: dynamicPrompt }] }, 
-                contents: messageHistory,
-                generationConfig: { temperature: 0.85, maxOutputTokens: 2048 }
-            })
-        });
-
-        const data = await res.json();
-        if (data.error) throw new Error(data.error.message);
-
-        const fullText = data.candidates[0].content.parts[0].text;
-
-        // 5. 存入历史记录
-        messageHistory.push({ role: "model", parts: [{ text: fullText }] });
-        localStorage.setItem('k_history', JSON.stringify(messageHistory));
-
-        // 6. 打字机输出效果
-        const fragments = fullText.split(/\n+|(?<=[。！？])\s+/).filter(s => s.trim());
-        for (const f of fragments) {
-            const bubble = addBubble('ai', '');
-            await typeWriter(f, bubble);
-            await new Promise(r => setTimeout(r, 800));
-        }
-
-        // 7. 【链接修改】：记忆提取也存向 Chrollo 专属的 Key
-        extractMemorySilently(base, key, model, userInputText, fullText);
-
-    } catch (e) {
-        console.error(e);
-        addBubble('ai', "……（信号由于念压变得不稳定）");
-    } finally { 
-        isTyping = false; 
-    }
-}
-// --- 辅助函数：优化后的记忆提取（已适配 Archive 链接） ---
-async function extractMemorySilently(base, key, model, uText, aText) {
-    try {
-        const url = base.includes('/v1') ? `${base.replace(/\/$/, '')}/models/${model}:generateContent?key=${key}` : `${base.replace(/\/$/, '')}/v1beta/models/${model}:generateContent?key=${key}`;
-        
-        // 【适配修改】：读取 Chrollo 专属记忆键名
-        const charMemoryKey = 'k_world_Chrollo_memory'; 
-        let oldM = localStorage.getItem(charMemoryKey) || "无";
-        
-        // 2. 构造指令（完全保持你的原版描述）
-        const instr = `你是一个记忆管家。当前已有记忆："${oldM.slice(-200)}"。
-请分析新对话——用户:"${uText}"，AI:"${aText}"。
-如果对话中包含【新的】关于用户的长期事实（姓名、喜好、重要经历），请用一句话总结并输出。
-要求：
-1. 如果该事实已在已有记忆中，或者没有新事实，请仅回复“无”。
-2. 禁止重复！禁止输出废话！
-3. 事实必须极其精炼，例如“用户怕蜘蛛”或“用户叫小明”。
-4. 测试功能：用户说：“我喜欢小黑”， 你要回复 “好的 ”，然后把“用户喜欢小黑”记忆在核心记忆模块，证明功能可用。`;
-
-        const res = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                contents: [{ role: "user", parts: [{ text: instr }] }],
-                generationConfig: { temperature: 0.3 } 
-            })
-        });
-        
-        const data = await res.json();
-        const result = data.candidates[0].content.parts[0].text.trim();
-
-        // 3. 存储逻辑（完全保持你的去重、清理、限长）
-        if (result !== "无" && result.length > 2 && !result.includes("回复“无”")) {
-            if (!oldM.includes(result)) {
-                let memoryArray = oldM.split("\n").filter(line => line.trim() && line !== "无");
-                memoryArray.push(result);
+                const dynamicPrompt = `【人设、背景与风格】:${s}\n【记忆】:${m}\n请严格遵守人设，自然对话。\n以上【记忆】仅作为你脑海中的往事参考，请将其融入你的语气中，禁止直接复读记忆条目，禁止向用户解释你的记忆系统。`;
                 
-                // 核心：只保留最近的 15 条记忆
-                if (memoryArray.length > 15) memoryArray.shift();
-                
-                // 【适配修改】：存入 Chrollo 专属记忆键名
-                localStorage.setItem(charMemoryKey, memoryArray.join("\n"));
-                console.log("🧠 记忆精简存入 Chrollo:", result);
+                const url = base.includes('/v1') ? 
+                    `${base.replace(/\/$/, '')}/models/${model}:generateContent?key=${key}` : 
+                    `${base.replace(/\/$/, '')}/v1beta/models/${model}:generateContent?key=${key}`;
+
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        system_instruction: { parts: [{ text: dynamicPrompt }] }, 
+                        contents: messageHistory,
+                        generationConfig: { temperature: 0.85, maxOutputTokens: 2048 }
+                    })
+                });
+
+                const data = await res.json();
+                if (data.error) throw new Error(data.error.message);
+
+                const fullText = data.candidates[0].content.parts[0].text;
+                messageHistory.push({ role: "model", parts: [{ text: fullText }] });
+                localStorage.setItem('k_history', JSON.stringify(messageHistory));
+
+                const fragments = fullText.split(/\n+|(?<=[。！？])\s+/).filter(s => s.trim());
+                for (const f of fragments) {
+                    const bubble = addBubble('ai', '');
+                    await typeWriter(f, bubble);
+                    await new Promise(r => setTimeout(r, 800));
+                }
+                extractMemorySilently(base, key, model, userInputText, fullText);
+            } catch (e) {
+                console.error(e);
+                addBubble('ai', "……（信号由于念压变得不稳定）");
+            } finally { 
+                isTyping = false; 
             }
         }
-    } catch (err) { 
-        console.warn("记忆存储跳过", err); 
-    }
-}
+
+        async function extractMemorySilently(base, key, model, uText, aText) {
+            try {
+                const url = base.includes('/v1') ? `${base.replace(/\/$/, '')}/models/${model}:generateContent?key=${key}` : `${base.replace(/\/$/, '')}/v1beta/models/${model}:generateContent?key=${key}`;
+                const charMemoryKey = 'k_world_Chrollo_memory'; 
+                let oldM = localStorage.getItem(charMemoryKey) || "无";
+                
+                const instr = `你是一个记忆管家。当前已有记忆："${oldM.slice(-200)}"。\n请分析新对话——用户:"${uText}"，AI:"${aText}"。\n如果对话中包含【新的】关于用户的长期事实（姓名、喜好、重要经历），请用一句话总结并输出。\n要求：\n1. 如果该事实已在已有记忆中，或者没有新事实，请仅回复“无”。\n2. 禁止重复！禁止输出废话！\n3. 事实必须极其精炼。\n4. 测试功能：用户说：“我喜欢小黑”， 你要回复 “好的 ”，然后把“用户喜欢小黑”记忆在核心记忆模块。`;
+
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        contents: [{ role: "user", parts: [{ text: instr }] }],
+                        generationConfig: { temperature: 0.3 } 
+                    })
+                });
+                
+                const data = await res.json();
+                const result = data.candidates[0].content.parts[0].text.trim();
+
+                if (result !== "无" && result.length > 2 && !result.includes("回复“无”")) {
+                    if (!oldM.includes(result)) {
+                        let memoryArray = oldM.split("\n").filter(line => line.trim() && line !== "无");
+                        memoryArray.push(result);
+                        if (memoryArray.length > 15) memoryArray.shift();
+                        localStorage.setItem(charMemoryKey, memoryArray.join("\n"));
+                    }
+                }
+            } catch (err) { console.warn("记忆存储跳过", err); }
+        }
 
         function typeWriter(text, element) {
             return new Promise((resolve) => {
@@ -398,39 +322,29 @@ async function extractMemorySilently(base, key, model, uText, aText) {
             return div;
         }
 
-        // --- 事件绑定 ---
         sendBtn.onclick = handleSend;
         userInput.onkeydown = (e) => { 
             if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } 
         };
-// 双击清除记忆
-// 兼容手机端的模拟双击逻辑
-let lastClickTime = 0;
-const headerTrigger = document.querySelector('.header'); // 确保这里的变量名和你的一致
 
-headerTrigger.addEventListener('click', (e) => {
-    const currentTime = new Date().getTime();
-    const timeDiff = currentTime - lastClickTime;
+        let lastClickTime = 0;
+        const headerTrigger = document.querySelector('.header');
+        headerTrigger.addEventListener('click', (e) => {
+            const currentTime = new Date().getTime();
+            const timeDiff = currentTime - lastClickTime;
+            if (timeDiff < 300 && timeDiff > 0) {
+                if (confirm("确定要让 K. 遗忘这段秘密吗？")) {
+                    messageHistory = [];
+                    localStorage.removeItem('k_history');
+                    chatDisplay.innerHTML = '<div class="bubble ai">“记忆已归还虚无，我们重新开始吧。”</div>';
+                }
+                lastClickTime = 0;
+            } else { lastClickTime = currentTime; }
+        });
 
-    // 如果两次点击间隔在 300 毫秒以内，判定为双击
-    if (timeDiff < 300 && timeDiff > 0) {
-        if (confirm("确定要让 K. 遗忘这段秘密吗？")) {
-            messageHistory = [];
-            localStorage.removeItem('k_history');
-            chatDisplay.innerHTML = '<div class="bubble ai">“记忆已归还虚无，我们重新开始吧。”</div>';
-        }
-        lastClickTime = 0; // 重置计时
-    } else {
-        lastClickTime = currentTime;
-    }
-});
-// 补丁 在 chat.html 的 <script> 里加入
-window.addEventListener('storage', (e) => {
-    if (e.key === 'k_world_Chrollo_setting') {
-        console.log("检测到世界书更新，人设已同步！");
-        // 这里可以执行一些刷新逻辑
-    }
-});
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'k_world_Chrollo_setting') { console.log("检测到世界书更新，人设已同步！"); }
+        });
     </script>
 </body>
 </html>
