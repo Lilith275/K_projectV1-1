@@ -26,24 +26,17 @@
 /* 1. 核心容器修复：彻底消灭右侧和底部白边 */
 /* --- 顶部 Header 优化版 --- */
 .header {
-    /* 1. 宽度适配：使用 100% 替代 100vw，防止在有滚动条的浏览器中出现横向溢出 */
-    width: 100% !important; 
-    
-    /* 2. 高度适配：利用 min-height 保证紧凑度 */
-    padding-top: env(safe-area-inset-top) !important; 
-    padding-bottom: 8px !important; 
-    
-    display: flex;
-    flex-direction: column;
-    align-items: center; 
-    justify-content: center;
-    background: rgba(255, 255, 255, 0.4); /* 增加一点透明度感 */
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border-bottom: 1px solid rgba(255, 133, 162, 0.1); /* 边框改用极淡的粉色 */
-    z-index: 9999;
-    flex-shrink: 0; /* 防止被下方聊天区域挤压变型 */
-}
+            padding: calc(env(safe-area-inset-top) + 10px) 20px 15px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+            flex-shrink: 0;
+            width: 100%;
+            position: relative;
+            z-index: 2000; /* 确保在最顶层，不会被气泡挡住 */
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
 /* 稍微调小一点名字，让整体看起来不那么“宽/厚” */
 .name { 
     font-size: 20px; /* 原 24px -> 20px */
@@ -197,8 +190,14 @@ background: #ffffff; /* 必须有实色背景 */    display: flex;
        <script>
         // 你的特质 Prompt 已移至世界书读取，此处仅作兜底
         const chatDisplay = document.getElementById('chatDisplay');
-        const userInput = document.getElementById('userInput');
-        const sendBtn = document.getElementById('sendBtn');
+    const userInput = document.getElementById('userInput');
+    const sendBtn = document.getElementById('sendBtn');
+
+    // 自动高度调整
+    userInput.addEventListener('input', function() {
+        this.style.height = '44px';
+        this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+    });
 
         const sounds = {
             pop: new Audio('https://assets.mixkit.co/active_storage/sfx/3005/3005-preview.mp3'),
