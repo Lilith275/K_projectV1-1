@@ -211,17 +211,16 @@ background: #ffffff; /* 必须有实色背景 */    display: flex;
 
         // --- 核心布局修复 ---
         function adjustLayout() {
-            window.scrollTo(0, 0);
-            if (window.visualViewport) {
-                document.querySelector('.phone').style.height = `${window.visualViewport.height}px`;
-            }
-            chatDisplay.scrollTop = chatDisplay.scrollHeight;
-        }
-
+        window.scrollTo(0, 0);
         if (window.visualViewport) {
-            window.visualViewport.addEventListener('resize', adjustLayout);
+            document.querySelector('.phone').style.height = `${window.visualViewport.height}px`;
         }
+        chatDisplay.scrollTop = chatDisplay.scrollHeight;
+    }
 
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', adjustLayout);
+    }
         // --- 初始化历史记录 ---
         window.onload = () => {
             const saved = localStorage.getItem('k_history');
