@@ -120,7 +120,36 @@ body, html {
 }
 
 /* ============================
+/* 核心：左上角返回按钮 */
+/* ============================
+   /* ============================
    1. 极简悬浮返回键 (只在左上角)
+   ============================ */
+#app-back-btn {
+    position: absolute;
+    /* 避开顶部的状态栏（25px） */
+    top: 55px; 
+    left: 20px;
+    z-index: 10001; /* 确保在 iframe 之上 */
+    
+    /* 变成一个精致的小圆球 */
+    width: 35px;
+    height: 35px;
+    background: rgba(255, 255, 255, 0.6); 
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+/* ============================
+   精准对齐的悬浮返回键
    ============================ */
 #app-back-btn {
     position: fixed;
@@ -136,6 +165,7 @@ body, html {
     -webkit-backdrop-filter: blur(15px);
     border-radius: 50%;
     
+    /* 核心对齐逻辑 */
     display: flex; 
     justify-content: center; 
     align-items: center;
@@ -143,19 +173,28 @@ body, html {
     cursor: pointer;
     box-shadow: 0 4px 10px rgba(0,0,0,0.06);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* 核心：取消之前可能存在的 padding 干扰 */
     padding: 0 !important;
 }
 
 /* 核心：视觉对齐的小箭头 */
 #app-back-btn::after {
     content: '';
-    width: 9px; 
+    width: 9px;  /* 奇数像素有时比偶数更容易在视觉上对齐中心 */
     height: 9px;
+    
+    /* 增加线宽到 2.5px，增强质感 */
     border-left: 2.5px solid #ffb6c1; 
     border-bottom: 2.5px solid #ffb6c1;
+    
+    /* 旋转 */
     transform: rotate(45deg); 
+    
+    /* 【灵魂手术】视觉补偿：
+       因为箭头开口向右，视觉重心在左，所以我们要手动向右挪动 1.5 到 2 像素 */
     margin-left: 2.5px; 
-    margin-top: 0.5px; 
+    margin-top: 0.5px; /* 如果觉得上下也不对，可以微调这里 */
 }
 
 /* 增加触摸时的丝滑反馈 */
@@ -176,9 +215,9 @@ body, html {
     width: 100%; 
     height: 100%;
     border: none;
-    padding-top: calc(44px + var(--safe-top)); 
+   padding-top: 0px !important;  
     box-sizing: border-box;
-    background: #fdf2f4;
+    background: transparent !important;
 }
 
 /* ============================
