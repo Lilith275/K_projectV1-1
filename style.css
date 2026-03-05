@@ -245,16 +245,19 @@ body, html {
 
 /* 调整了桌面的 Grid 布局 */
 /* 桌面容器：使用网格布局 */
+/* 桌面容器：优化手机端的间距 */
 .desktop {
     flex: 1;
     display: grid;
-    /* 分成4列 */
     grid-template-columns: repeat(4, 1fr);
-    /* 分成6行，每一行的高度自动撑开，确保填满屏幕防止底部留白过多 */
+    /* 核心修改：使用 1fr 确保等分，同时限制最大高度防止撑开 */
     grid-template-rows: repeat(6, 1fr); 
-    gap: 15px;
-    padding: 20px;
+    gap: 10px;        /* 原 15px -> 10px：压缩间距 */
+    padding: 10px;     /* 原 20px -> 10px：增加可用空间 */
+    padding-top: 50px; /* 为状态栏留出固定位置 */
     position: relative;
+    box-sizing: border-box;
+    height: calc(100vh - 120px); /* 动态计算高度，扣除 Dock 栏 */
 }
 
 /* 新增：卡片/小组件通用样式 */
@@ -281,14 +284,14 @@ body, html {
 }.app-icon:active { transform: scale(0.92); transition: 0.1s; }
 
 .icon-img {
-    width: 60px;
-    height: 60px;   
+    width: 52px;
+    height: 52px;   
     background: rgba(255, 255, 255, 0.4) !important;
     border-radius: 15px;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 12px; 
+    padding: 10px; 
     box-sizing: border-box;
     overflow: hidden;
     backdrop-filter: blur(10px); 
@@ -302,13 +305,13 @@ body, html {
  object-fit: cover; /* 撑满方块 */
 }
 .app-label {
-    margin-top: 8px; /* 稍微增加间距，让图标和文字不那么拥挤 */
+    margin-top: 5px; /* 稍微增加间距，让图标和文字不那么拥挤 */
     
     /* 1. 字体族：优先使用苹果和现代系统字体 */
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
     
     /* 2. 颜色与大小 */
-    font-size: 13px; /* 稍微调小一点，会显得更精致 */
+    font-size: 11px; /* 稍微调小一点，会显得更精致 */
     color: rgb(255, 255, 255); /* 使用高透白，比纯灰更灵动 */
     
     /* 3. 字体质感 */
@@ -353,7 +356,10 @@ body, html {
 .deco-img { grid-area: 3 / 3 / 5 / 5; }
 
 /* 音乐唱片：底部左侧 */
-.music-widget { grid-area: 5 / 1 / 7 / 3; }
+.music-widget { grid-area: 5 / 1 / 7 / 3;
+padding: 10px
+ }
+
 
 /* 左侧四个图标定位 */
 .i1 { grid-area: 3 / 1; }
@@ -369,10 +375,10 @@ body, html {
 
 /* 底部 Dock 保持不变 */
 .dock {
-    margin: 0 20px calc(15px + var(--safe-bottom));
-    height: 85px;
+margin: 0 15px calc(10px + var(--safe-bottom));
+    height: 75px;
     background: rgba(255, 255, 255, 0.1); 
-    border-radius: 20px;
+    border-radius: 24px;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -382,8 +388,8 @@ body, html {
     border: 1px solid rgba(255, 255, 255, 0.1); 
 }
 .icon-img-small {
-    width: 55px;
-    height: 55px;
+    width: 48px;
+    height: 48px;
     background: rgba(20, 20, 20, 0.1) !important;
     border-radius: 16px;
     display: flex;
@@ -434,8 +440,8 @@ body, html {
 .lyrics-container {
     overflow: hidden; /* 必须隐藏超出部分 */
     position: relative;
-   height: 160px; /* 从原本的60px增加到85px，参数很克制 */
-    width: 120%;
+   height: 60px; /* 从原本的60px增加到85px，参数很克制 */
+    width: 100%;
     margin: 0 auto;
     mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent); /* 给上下加点淡出虚化，更高亮 */
     -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
@@ -471,6 +477,8 @@ body, html {
 }
 /* 歌词无限滚动动画 */
 .lyrics-scroll {
+    font-size: 11px; /* 减小字号 */
+    margin: 6px 0;   /* 减小行间距 */
     display: flex;
     flex-direction: column;
     padding: 10px 0;
@@ -526,53 +534,75 @@ body, html {
 /* ============================
    顶部卡片区域专项样式
    ============================ */
+/* ============================
+   顶部卡片区域专项样式 - 手机适配优化版
+   ============================ */
 .top-profile-card {
     display: flex !important;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    /* --- 调优1：压缩纵向高度 --- */
-    padding: 2px 13px !important; /* 减小上下 padding，让卡片变窄 */
-    gap: 0px; /* 彻底取消元素间的默认缝隙 */
+    /* 压缩纵向高度，确保不挤占下方图标 */
+    padding: 10px 13px !important; 
     margin-top: 35px !important;
+    box-sizing: border-box;
+    /* 限制最小高度防止内容重叠 */
+    min-height: 180px; 
 }
 
-/* --- 调优2：头像再次放大 --- */
+/* 头像：改用相对单位，确保在窄屏下自动缩小 */
 .profile-avatar {
-    width: 95px;  /* 你可以在这里调整头像大小 */
-    height: 95px;
+    width: 85px;  
+    height: 85px;
+    /* 手机端适配：如果屏幕太小则自动缩小头像 */
+    max-width: 22vw;
+    max-height: 22vw;
     border-radius: 50%;
     border: 1.5px solid rgba(255, 255, 255, 0.6);
     background: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2); /* 头像边缘微光 */
-    margin-bottom: 2px;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    margin-bottom: 5px;
     overflow: hidden;
+    flex-shrink: 0; /* 禁止被挤压 */
 }
 
-/* --- 调优3：高级感字体与“泛光”效果 --- */
-.profile-time {
-    /* 使用极细字体 */
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-weight: 200; 
-    font-size: 58px; 
-    color: #fff;
-    line-height: 1.1;
-    letter-spacing: 3px;
-    
-    /* 核心：泛光滤镜 (类似音乐组件的效果) */
-    text-shadow: 
-        0 1px 3px rgba(0, 0, 0, 0.2),      /* 黑色底层：确保白字轮廓清晰 */
-        0 0 10px rgba(255, 182, 193, 0.8), /* 粉色泛光：保持你要的氛围 */
-        0 0 20px rgba(255, 182, 193, 0.4);
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
 }
 
+/* ID 样式：保留你原本的配色和阴影 */
 .profile-id {
     font-size: 11px;
     color: rgba(252, 173, 186, 0.938);
     letter-spacing: 3px;
-    font-weight: 480; /* 稍微加粗 */
-    margin-bottom: -3px;
-    text-shadow: 0 1px 2px rgba(255, 182, 193, 0.6); /* 给粉色字加白色底影 */
+    font-weight: 480; 
+    margin-bottom: 2px;
+    text-shadow: 0 1px 2px rgba(255, 182, 193, 0.6);
+}
+
+/* 时间与日期容器 */
+.profile-time-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0px;
+}
+
+/* 核心：时间字体保留泛光，但增加大小自适应 */
+.profile-time {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 200; 
+    /* 动态字号：最小38px，随屏幕宽度缩放，最大58px */
+    font-size: clamp(38px, 12vw, 58px); 
+    color: #fff;
+    line-height: 1.1;
+    letter-spacing: 3px;
+    text-shadow: 
+        0 1px 3px rgba(0, 0, 0, 0.2),      
+        0 0 10px rgba(255, 182, 193, 0.8), 
+        0 0 20px rgba(255, 182, 193, 0.4);
 }
 
 .profile-date {
@@ -581,22 +611,23 @@ body, html {
     font-weight: 300;
     letter-spacing: 2px;
     text-shadow: 0 0 5px rgba(255, 182, 193, 0.6);
-    
-    /* 往左移：调整这个数值直到满意 */
-    margin-right: -1px; 
+    margin-top: -2px;
 }
 
+/* 签名：增加溢出隐藏，防止文字过长撑乱布局 */
 .profile-signature {
     font-size: 12px;
     color: rgba(255, 159, 175, 0.938);
-    margin-top: 12px;
-    font-style: italic; /* 斜体增加故事感 */
-    width: 80%;
+    margin-top: 10px;
+    font-style: italic;
+    width: 85%;
     text-align: center;
+    /* 保持单行防止撑开卡片高度 */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     text-shadow: 0 0 5px rgba(255, 182, 193, 0.6);
+    flex-shrink: 0;
 }
 .profile-avatar img {
     width: 100%;
