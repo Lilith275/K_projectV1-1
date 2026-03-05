@@ -23,13 +23,16 @@
     overflow: hidden;
 }
         /* --- 顶部 Header 窄化优化版 --- */
-     .header {
-    /* 保持你的 env 逻辑，但不额外增加任何 px */
+    .header {
+    /* 使用固定值和安全区的组合，但限制最大高度 */
     padding-top: env(safe-area-inset-top) !important; 
+    padding-bottom: 5px !important;
     
-    /* 核心改动：把昨天的 5px 压缩到 2px，彻底变窄 */
-    padding-bottom: 2px !important; 
-    
+    /* 核心补丁：锁死高度，防止被 env() 撑得太开 */
+    height: auto !important;
+    max-height: calc(env(safe-area-inset-top) + 45px) !important; 
+    min-height: 60px; /* 保证基本的视觉存在感 */
+
     width: 100vw !important;
     display: flex;
     flex-direction: column;
@@ -39,7 +42,15 @@
     backdrop-filter: blur(15px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     z-index: 9999;
-    flex-shrink: 0; /* 增加这一行，防止被下方聊天区挤压变形 */
+    flex-shrink: 0;
+}
+/* 针对全屏模式的精准微调 */
+@media screen and (display-mode: standalone), (display-mode: fullscreen) {
+    .header {
+        /* 全屏时如果觉得还是太宽，把这里调小，例如 10px */
+        padding-top: 15px !important; 
+        max-height: 65px !important;
+    }
 }
     .name { 
     font-size: 20px; /* 从 24px 稍微调小一点点，视觉上会显得 Header 更窄 */
