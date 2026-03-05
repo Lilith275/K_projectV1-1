@@ -26,16 +26,20 @@
 /* 1. 核心容器修复：彻底消灭右侧和底部白边 */
 /* --- 顶部 Header 优化版 --- */
 .header {
-            padding: calc(env(safe-area-inset-top) + 10px) 20px 15px;
-            text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
-            flex-shrink: 0;
+            /* 关键：增加顶部间距，适配刘海屏并保持优雅高度 */
+            padding-top: calc(env(safe-area-inset-top) + 15px) !important;
+            padding-bottom: 10px !important;
             width: 100%;
-            position: relative;
-            z-index: 2000; /* 确保在最顶层，不会被气泡挡住 */
-            cursor: pointer;
-            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1); 
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 999;
+            flex-shrink: 0;
         }
 /* 稍微调小一点名字，让整体看起来不那么“宽/厚” */
 .name { 
