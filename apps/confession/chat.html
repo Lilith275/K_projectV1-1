@@ -23,41 +23,25 @@
     overflow: hidden;
 }
         /* --- 顶部 Header 窄化优化版 --- */
-   .header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw !important;
-    /* 增加高度，确保背景能盖住文字区域，彻底消灭黑条 */
-    height: calc(env(safe-area-inset-top) + 35px) !important; 
-    
-    background: rgba(255, 255, 255, 0.15) !important;
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    z-index: 9999;
-    
-    /* 核心：取消 flex 布局对位置的影响 */
-    display: block !important; 
-    overflow: visible !important;
-    padding-top: calc(env(safe-area-inset-top) + 35px) !important;
-    box-sizing: border-box !important;
-}
+  .header {
+            padding: calc(env(safe-area-inset-top) + 15px) 20px 15px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+            flex-shrink: 0;
+            width: 100%;
+            position: relative;
+            z-index: 2000; /* 确保在最顶层，不会被气泡挡住 */
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
    .name { 
-    font-size: 18px; /* 稍微调小，更精致 */
-    font-weight: 600; 
-    letter-spacing: 5px; 
-    color: #ff85a2; 
-    margin: 0 !important;
-    line-height: 1.2;
-    transform: translateX(2.5px); /* 补偿 letter-spacing 造成的右偏，实现绝对居中 */
-    position: relative !important;
-    top: -12px !important;
+    font-size: 24px; font-weight: 600; letter-spacing: 6px; color: #ff85a2; pointer-events: none;
 }
 .status { 
     font-size: 10px; 
     color: #b8a0aa; 
     margin-top: 2px !important;
-    line-height: 1;
 }
 
         /* --- 以下部分严格保持原样，禁止任何逻辑修改 --- */
