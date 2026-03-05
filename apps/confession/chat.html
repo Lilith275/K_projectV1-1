@@ -23,46 +23,47 @@
     overflow: hidden;
 }
         /* --- 顶部 Header 窄化优化版 --- */
-      .header {
-    /* 核心：只给安全区高度，不再给任何额外的 padding-top */
-    padding-top: env(safe-area-inset-top) !important;
-    padding-bottom: 2px !important; /* 极窄 */
+     .header {
+    /* 保持你的 env 逻辑，但不额外增加任何 px */
+    padding-top: env(safe-area-inset-top) !important; 
     
-    width: 100%;
-    height: auto; /* 让它根据内容自适应，但不被拉伸 */
-    min-height: calc(env(safe-area-inset-top) + 40px); /* 设定一个最小窄高度 */
+    /* 核心改动：把昨天的 5px 压缩到 2px，彻底变窄 */
+    padding-bottom: 2px !important; 
     
+    width: 100vw !important;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: center; 
     justify-content: center;
-    
-    background: rgba(255, 255, 255, 0.1); 
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    z-index: 999;
-    flex-shrink: 0; /* 严禁被拉宽 */
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    z-index: 9999;
+    flex-shrink: 0; /* 增加这一行，防止被下方聊天区挤压变形 */
 }
-       .name { 
-    /* 3. 紧贴安全区边界，不给额外 margin */
-    font-size: 19px; 
+    .name { 
+    font-size: 20px; /* 从 24px 稍微调小一点点，视觉上会显得 Header 更窄 */
     font-weight: 600; 
-    letter-spacing: 4px; 
+    letter-spacing: 5px; 
     color: #ff85a2; 
-    margin-top: 2px !important; 
+    pointer-events: none;
+    margin: 0 !important; /* 严禁任何外边距撑开高度 */
+    line-height: 1.2;
 }
-        .status { 
-    font-size: 9px; 
+.status { 
+    font-size: 10px; /* 从 11px 缩到 10px */
     color: #b8a0aa; 
-    margin-top: 0px;
-    margin-bottom: 2px;
+    pointer-events: none;
+    margin: 0 !important;
+    line-height: 1.2;
 }
 
        /* 4. 返回键位置同步上提，防止它掉在下面 */
 .back-btn {
     position: absolute;
     left: 15px;
-    top: calc(env(safe-area-inset-top) + 6px); 
+    /* 这里的 +5px 是为了配合你压缩后的 padding-bottom */
+    top: calc(env(safe-area-inset-top) + 5px); 
     z-index: 2001;
 }
         /* --- 以下部分严格保持原样，禁止任何逻辑修改 --- */
