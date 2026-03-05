@@ -29,7 +29,7 @@
     left: 0;
     width: 100vw !important;
     /* 增加高度，确保背景能盖住文字区域，彻底消灭黑条 */
-    height: calc(env(safe-area-inset-top) + 20px) !important; 
+    height: calc(env(safe-area-inset-top) + 25px) !important; 
     
     background: rgba(255, 255, 255, 0.15) !important;
     backdrop-filter: blur(15px);
@@ -39,7 +39,7 @@
     /* 核心：取消 flex 布局对位置的影响 */
     display: block !important; 
     overflow: visible !important;
-    padding-top: calc(env(safe-area-inset-top) + 20px) !important;
+    padding-top: calc(env(safe-area-inset-top) + 25px) !important;
     box-sizing: border-box !important;
 }
    .name { 
