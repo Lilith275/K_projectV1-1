@@ -24,26 +24,42 @@
 }
 
 /* 1. 核心容器修复：彻底消灭右侧和底部白边 */
-/* 1. 顶部 Header 修复：适配 black-translucent 模式 */
+/* --- 顶部 Header 优化版 --- */
 .header {
-    /* 因为脚本强行让内容置顶，我们要用 padding 把它从刘海挤出来 */
-    /* env(safe-area-inset-top) 在你这个模式下通常是 44px 到 50px */
+    /* 1. 宽度适配：使用 100% 替代 100vw，防止在有滚动条的浏览器中出现横向溢出 */
+    width: 100% !important; 
+    
+    /* 2. 高度适配：利用 min-height 保证紧凑度 */
     padding-top: env(safe-area-inset-top) !important; 
+    padding-bottom: 8px !important; 
     
-    /* 这里控制你想要的“窄一点”，如果觉得还是宽，就把 5px 改成 0 */
-    padding-bottom: 5px !important; 
-    
-    width: 100vw !important; /* 解决右侧留空 */
     display: flex;
     flex-direction: column;
     align-items: center; 
     justify-content: center;
-    background: rgba(255, 255, 255, 0.15); /* 稍微加深一点点，防止透出来的状态栏太乱 */
+    background: rgba(255, 255, 255, 0.4); /* 增加一点透明度感 */
     backdrop-filter: blur(15px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    -webkit-backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(255, 133, 162, 0.1); /* 边框改用极淡的粉色 */
     z-index: 9999;
+    flex-shrink: 0; /* 防止被下方聊天区域挤压变型 */
+}
+/* 稍微调小一点名字，让整体看起来不那么“宽/厚” */
+.name { 
+    font-size: 20px; /* 原 24px -> 20px */
+    font-weight: 600; 
+    letter-spacing: 4px; /* 稍微缩紧一点字间距 */
+    color: #ff85a2; 
+    pointer-events: none;
+    margin-top: 5px;
 }
 
+.status { 
+    font-size: 10px; /* 原 11px -> 10px */
+    color: #b8a0aa; 
+    pointer-events: none;
+    margin-bottom: 2px;
+}
 /* 2. 容器高度修复：防止底部出现黑边 */
 .phone {
     position: fixed;
@@ -120,15 +136,24 @@ background: #ffffff; /* 必须有实色背景 */    display: flex;
 
 #userInput {
     flex: 1;
-    height: 42px; /* 固定高度 */
-    line-height: 22px; /* 行高略大于字体 */
+    height: 42px;
+    line-height: 22px;
     padding: 10px 15px !important;
     font-size: 16px;
     border-radius: 21px;
     box-sizing: border-box;
-    /* 强力居中补丁 */
     display: flex;
-    align-items: center; 
+    align-items: center;
+    /* 默认边框颜色，保持你原本的淡粉色风格 */
+    border: 1px solid #ffe4e9; 
+    background: #fff;
+    resize: none; /* 禁止用户手动拉伸输入框 */
+    transition: border-color 0.3s;
+}
+/* 核心：消除点击时的绿色边框 */
+#userInput:focus {
+    outline: none !important; /* 彻底移除默认的蓝色或绿色轮廓 */
+
 }
 
         #sendBtn { 
