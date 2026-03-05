@@ -250,14 +250,13 @@ body, html {
     flex: 1;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    /* 核心修改：使用 1fr 确保等分，同时限制最大高度防止撑开 */
     grid-template-rows: repeat(6, 1fr); 
-    gap: 10px;        /* 原 15px -> 10px：压缩间距 */
-    padding: 10px;     /* 原 20px -> 10px：增加可用空间 */
-    padding-top: 50px; /* 为状态栏留出固定位置 */
+    gap: 8px;          /* 间距从 10px 缩小到 8px，防止拥挤 */
+    padding: 10px;     
+    padding-top: 50px; 
     position: relative;
     box-sizing: border-box;
-    height: calc(100vh - 120px); /* 动态计算高度，扣除 Dock 栏 */
+    height: calc(100vh - 110px); 
 }
 
 /* 新增：卡片/小组件通用样式 */
@@ -284,48 +283,36 @@ body, html {
 }.app-icon:active { transform: scale(0.92); transition: 0.1s; }
 
 .icon-img {
-    width: 52px;
-    height: 52px;   
+    width: 46px;       /* 从 52px 缩小到 46px */
+    height: 46px;      
     background: rgba(255, 255, 255, 0.4) !important;
-    border-radius: 15px;
+    border-radius: 13px; /* 圆角同步微调 */
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 10px; 
+    padding: 8px;      /* 内部边距缩小 */
     box-sizing: border-box;
     overflow: hidden;
     backdrop-filter: blur(10px); 
     -webkit-backdrop-filter: blur(10px); 
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 }
-
 .desktop-img {
     width: 100%;
     height: 100%;
  object-fit: cover; /* 撑满方块 */
 }
 .app-label {
-    margin-top: 5px; /* 稍微增加间距，让图标和文字不那么拥挤 */
-    
-    /* 1. 字体族：优先使用苹果和现代系统字体 */
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-    
-    /* 2. 颜色与大小 */
-    font-size: 11px; /* 稍微调小一点，会显得更精致 */
-    color: rgb(255, 255, 255); /* 使用高透白，比纯灰更灵动 */
-    
-    /* 3. 字体质感 */
+    margin-top: 4px;   
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+    font-size: 10px;   /* 文字从 11px 缩小到 10px */
+    color: rgb(255, 255, 255); 
     font-weight: 500;
-    letter-spacing: 0.8px; /* 增加字间距，这是高级感的来源 */
+    letter-spacing: 0.5px;
     text-align: center;
     white-space: nowrap;
-    
-    /* 4. 强化阴影：即便在黑色背景下也带有一种朦胧的质感 */
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6), 0 0 10px rgba(0, 0, 0, 0.3);
-    
-    /* 抗锯齿，让文字更平滑 */
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
 }
 .widget {
     font-family: -apple-system, "SF Pro Display", "PingFang SC", sans-serif;
@@ -375,10 +362,10 @@ padding: 10px
 
 /* 底部 Dock 保持不变 */
 .dock {
-margin: 0 15px calc(10px + var(--safe-bottom));
-    height: 75px;
+margin: 0 15px calc(8px + var(--safe-bottom)); /* 减小底部间距 */
+    height: 70px;      /* 从 75px 缩小到 70px */
     background: rgba(255, 255, 255, 0.1); 
-    border-radius: 24px;
+    border-radius: 22px;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -388,14 +375,14 @@ margin: 0 15px calc(10px + var(--safe-bottom));
     border: 1px solid rgba(255, 255, 255, 0.1); 
 }
 .icon-img-small {
-    width: 48px;
-    height: 48px;
+    width: 44px;       /* 从 48px 缩小到 44px */
+    height: 44px;
     background: rgba(20, 20, 20, 0.1) !important;
-    border-radius: 16px;
+    border-radius: 14px;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 8px; 
+    padding: 7px; 
     box-sizing: border-box;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
@@ -405,7 +392,7 @@ margin: 0 15px calc(10px + var(--safe-bottom));
     position: relative;
     overflow: hidden;
     flex-direction: column !important;
-    padding: 15px;
+    padding: 8px !important; /* 减小内边距，释放空间 */
 }
 
 /*1. 小旋转唱片：放在左上角，大小适中 */
@@ -438,12 +425,12 @@ margin: 0 15px calc(10px + var(--safe-bottom));
 }
 /* 歌词容器：只显示中间几行 */
 .lyrics-container {
-    overflow: hidden; /* 必须隐藏超出部分 */
+    overflow: hidden; 
     position: relative;
-   height: 60px; /* 从原本的60px增加到85px，参数很克制 */
+    height: 50px;      /* 从 60px 压缩到 50px */
     width: 100%;
     margin: 0 auto;
-    mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent); /* 给上下加点淡出虚化，更高亮 */
+    mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
     -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
     display: flex;
     align-items: center;
@@ -477,11 +464,11 @@ margin: 0 15px calc(10px + var(--safe-bottom));
 }
 /* 歌词无限滚动动画 */
 .lyrics-scroll {
-    font-size: 11px; /* 减小字号 */
-    margin: 6px 0;   /* 减小行间距 */
-    display: flex;
-    flex-direction: column;
-    padding: 10px 0;
+    font-size: 11px;   /* 歌词字号微调 */
+    color: rgba(255, 255, 255, 0.8);
+    margin: 6px 0;     /* 减小行间距 */
+    text-align: center;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.5);
     /* 动画名称 速度 线性播放 无限循环 */
     animation: lyric-move 20s linear infinite; 
     animation-play-state: paused; /* 默认暂停，播放时启动 */
@@ -628,6 +615,7 @@ margin: 0 15px calc(10px + var(--safe-bottom));
     text-overflow: ellipsis;
     text-shadow: 0 0 5px rgba(255, 182, 193, 0.6);
     flex-shrink: 0;
+    margin-top: -2px;
 }
 .profile-avatar img {
     width: 100%;
@@ -643,26 +631,16 @@ margin: 0 15px calc(10px + var(--safe-bottom));
 
 /* 照片
 .deco-photo {
-    /* 1. 圆角设置：这里的 20px 可以根据你其他小组件的圆角来统一 */
-    border-radius: 20px !important; 
-    
-    /* 2. 放入照片：把 assetsUI/your-photo.jpg 换成你真实的照片路径 */
+   border-radius: 18px !important; 
     background-image: url('assetsUI/kuroro.png'); 
-    
-    /* 3. 照片显示对齐方式 */
-    background-size: cover;      /* 核心：自动裁剪缩放，填满整个框 */
-    background-position: center; /* 照片居中显示 */
-    background-repeat: no-repeat;
-    
-    /* 4. 细节美化 */
-    border: 1px solid rgb(255, 255, 255); /* 薄边框 */
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);    /* 淡淡的投影，增加立体感 */
-
-    /* 如果你想让照片看起来更有氛围感，可以加一个微弱的内阴影 */
+    background-size: cover; 
+    background-position: center;
+    border: 1px solid rgb(255, 255, 255);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* 投影稍微收敛 */
     position: relative;
     overflow: hidden;
-    
- }
+}
+
 
 /* 可选：给照片加一个蒙版效果，让它和整体肤色更搭 */
 .deco-photo::after {
