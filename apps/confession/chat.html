@@ -25,51 +25,46 @@
 
         /* --- 顶部 Header 窄化优化版 --- */
       .header {
-    /* 1. 彻底取消多余的 calc 间距，只保留基础安全区 */
-    padding-top: env(safe-area-inset-top) !important;
+    /* 1. 核心修复：这里不再加任何 +15px，直接用原生的安全区高度 */
+    padding-top: env(safe-area-inset-top) !important; 
     
-    /* 2. 底部间距从 20px 缩减到 4px，让它变到最窄 */
-    padding-bottom: 4px !important; 
+    /* 2. 核心修复：底部内边距缩减到极小，消灭“宽”的根源 */
+    padding-bottom: 5px !important; 
     
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: transparent; /* 去掉背景色，视觉上更窄 */
+    background: transparent; 
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     z-index: 999;
     flex-shrink: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
-        .name { 
-            font-size: 20px; 
-            font-weight: 600; 
-            letter-spacing: 4px; 
-            color: #ff85a2; 
-            pointer-events: none;
-            margin-top: 8px; /* 补偿刘海位置 */
-        }
-
+       .name { 
+    /* 3. 紧贴安全区边界，不给额外 margin */
+    font-size: 19px; 
+    font-weight: 600; 
+    letter-spacing: 4px; 
+    color: #ff85a2; 
+    margin-top: 2px !important; 
+}
         .status { 
-            font-size: 10px; 
-            color: #b8a0aa; 
-            pointer-events: none;
-            margin-top: 2px;
-        }
+    font-size: 9px; 
+    color: #b8a0aa; 
+    margin-top: 0px;
+    margin-bottom: 2px;
+}
 
-        .back-btn {
-            position: absolute;
-            left: 15px;
-            /* 随窄 Header 动态居中 */
-            top: calc(env(safe-area-inset-top) + 12px); 
-            z-index: 2001;
-            text-decoration: none;
-            color: #ff85a2;
-            font-size: 24px;
-            font-weight: bold;
-        }
-
+       /* 4. 返回键位置同步上提，防止它掉在下面 */
+.back-btn {
+    position: absolute;
+    left: 15px;
+    top: calc(env(safe-area-inset-top) + 6px); 
+    z-index: 2001;
+}
         /* --- 以下部分严格保持原样，禁止任何逻辑修改 --- */
         .phone {
             position: fixed;
