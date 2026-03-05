@@ -41,41 +41,52 @@ const backBtn = document.getElementById('global-back-btn');
 function launchApp(url) {
     const overlay = document.getElementById('app-overlay');
     const frame = document.getElementById('app-frame');
+    const mask = document.getElementById('app-loader-mask');
     const backBtn = document.getElementById('global-back-btn');
 
-    // 1. 如果是新 App，先让 iframe 透明
-    if (frame.src !== url) {
-        frame.style.opacity = "0";
+    // 1. 如果是不同的 App，启动挡板
+    if (frame.getAttribute('data-current-src') !== url) {
+        mask.style.display = 'flex';   // 显示黑屏挡板
+        mask.style.opacity = '1';
+        frame.style.opacity = '0';     // 隐藏旧内容
         frame.src = url;
+        frame.setAttribute('data-current-src', url); // 记录当前地址
     }
 
-    // 2. 打开遮罩层
+    // 2. 展开 App 容器
     overlay.classList.add('open');
     backBtn.style.display = 'flex';
 
-    // 3. 监听加载完成事件
+    // 3. 核心修复：监听加载
+    // 手机端 onload 可能不准，我们加个保险
     frame.onload = () => {
-        // 只有当内容真正加载好后，才展示出来
-        frame.style.transition = "opacity 0.3s ease";
-        frame.style.opacity = "1";
+        setTimeout(() => { // 给手机端浏览器 50ms 的渲染缓冲
+            frame.style.opacity = '1';
+            mask.style.opacity = '0';
+            setTimeout(() => { mask.style.display = 'none'; }, 300); // 彻底移除挡板
+        }, 50);
     };
 }
-    overlay.classList.add('open');
-    backBtn.style.display = 'flex';
 
 function closeApp() {
     const overlay = document.getElementById('app-overlay');
-    const frame = document.getElementById('app-frame');
-    
-    // 让遮罩层滑下
     overlay.classList.remove('open');
-    
-    // 关键：等动画结束后清空 src，防止下次打开显示旧内容
-    setTimeout(() => {
-        frame.src = "about:blank"; 
-        frame.style.opacity = "0"; // 顺便隐藏 iframe，等待下次加载
-    }, 300); // 300ms 通常是 CSS 动画的时间
+    // 注意：不要在这里清空 src，保持静默，下次启动时由 launchApp 处理
 }
+function closeApp() {
+    // 只需要让整个遮罩层滑下去即可
+    document.getElementById('app-overlay').classList.remove('open');
+}
+/* ============================
+   4. iOS 滑动反馈优化
+   ============================ */
+// 禁止桌面整体被无意义滑动
+document.addEventListener('touchmove', (e) => {
+    // 允许 iframe 内部滚动，允许解锁滑动，禁止桌面整体滚动
+    if (e.target.id === 'desktop' || e.target.id === 'lock-screen') {
+        e.preventDefault();
+    }
+}, { passive: false });
 
 
 function applySystemSettings() {
