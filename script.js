@@ -37,47 +37,18 @@ function backToLock() {
 
 // 3. App 启动与关闭 (带返回键联动)
 const backBtn = document.getElementById('global-back-btn');
-let currentIframeId = 'a'; // 记录当前使用的是哪个
+
 function launchApp(url) {
     const overlay = document.getElementById('app-overlay');
+    const frame = document.getElementById('app-frame');
     const backBtn = document.getElementById('global-back-btn');
     
-    // 确定当前和后台的 iframe
-    const activeFrame = document.getElementById(`iframe-${currentIframeId}`);
-    const nextIframeId = currentIframeId === 'a' ? 'b' : 'a';
-    const nextFrame = document.getElementById(`iframe-${nextIframeId}`);
-
-    // 1. 如果地址没变，直接开，不闪烁
-    if (nextFrame.getAttribute('data-src') === url || activeFrame.getAttribute('data-src') === url) {
-        overlay.classList.add('open');
-        backBtn.style.display = 'flex';
-        return;
-    }
-
-    // 2. 在“后台”静默加载新 App
-    nextFrame.src = url;
-    nextFrame.setAttribute('data-src', url);
-
-    // 3. 核心：只有当后台 iframe 加载完成后，再执行切换动画
-    nextFrame.onload = () => {
-        // 先让 Overlay 出现 (如果还没开)
-        overlay.classList.add('open');
-        backBtn.style.display = 'flex';
-
-        // 稍微延迟 50ms 确保手机端绘制完成
-        setTimeout(() => {
-            activeFrame.classList.remove('active');
-            nextFrame.classList.add('active');
-            currentIframeId = nextIframeId; // 交换身份
-        }, 50);
-    };
+    if (frame.src !== url) frame.src = url; 
+    
+    overlay.classList.add('open');
+    backBtn.style.display = 'flex'; // 关键：显示按钮
 }
 
-function closeApp() {
-    const overlay = document.getElementById('app-overlay');
-    overlay.classList.remove('open');
-    // 注意：不要在这里清空 src，保持静默，下次启动时由 launchApp 处理
-}
 function closeApp() {
     // 只需要让整个遮罩层滑下去即可
     document.getElementById('app-overlay').classList.remove('open');
@@ -292,47 +263,4 @@ window.addEventListener('DOMContentLoaded', initLyricsScroll);
 
     // 每 400 毫秒扫描一次，确保壁纸和字体同时生效
     setInterval(masterSync, 400);
-})();
-//强力 JS 居中补丁
-(function() {
-    const adjustBackBtn = () => {
-        const header = document.querySelector('.header');
-        const backBtn = document.querySelector('#app-back-btn');
-        
-        if (header && backBtn) {
-            // 1. 获取 Header 的实际渲染高度（包括安全区内边距）
-            const headerRect = header.getBoundingClientRect();
-            const headerHeight = headerRect.height;
-            
-            // 2. 获取按钮自身高度
-            const btnHeight = backBtn.offsetHeight;
-            
-            // 3. 计算物理中心点：(Header总高 / 2) - (按钮高 / 2)
-            // 这样无论刘海占了多少像素，按钮永远在 Header 的垂直中轴线上
-            const centerY = (headerHeight / 2) - (btnHeight / 2);
-            
-            // 4. 暴力应用位置
-            backBtn.style.position = 'fixed';
-            backBtn.style.top = `${centerY}px`;
-            backBtn.style.transform = 'none'; // 清除 CSS 可能存在的偏移干扰
-            
-            // 5. 针对 WebApp 全屏模式的微调
-            // 如果是在桌面全屏，由于状态栏消失，Header 会变窄，这里能自动适配
-            if (window.matchMedia('(display-mode: standalone)').matches) {
-                backBtn.style.left = '15px';
-            }
-        }
-    };
-
-    // 初始化执行
-    window.addEventListener('load', adjustBackBtn);
-    // 窗口大小改变（如旋转或全屏切换）时重新计算
-    window.addEventListener('resize', adjustBackBtn);
-    // 针对 iOS 键盘弹起后的视口变化
-    if (window.visualViewport) {
-        window.visualViewport.addEventListener('resize', adjustBackBtn);
-    }
-    
-    // 立即执行一次
-    setTimeout(adjustBackBtn, 100);
 })();
