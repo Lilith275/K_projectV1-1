@@ -706,31 +706,3 @@ margin: 0 15px calc(8px + var(--safe-bottom)); /* 减小底部间距 */
     text-shadow: 0 0 5px rgba(255, 182, 193, 0.6);
     mix-blend-mode: difference; 
 }
-/* --- 切换补丁🍮 --- */
-.app-instance {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    border: none;
-    display: none; /* 默认全部关闭 */
-    background: #fff;
-    will-change: transform, opacity; /* 告知显卡提前准备 */
-}
-
-.app-instance.active {
-    display: block; /* 只有激活的才渲染 */
-}
-
-#app-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 1000;
-    background: #000;
-    transform: translateY(100%); /* 初始在屏幕下方 */
-    transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
-}
-
-#app-overlay.open {
-    transform: translateY(0); /* 滑上来 */
-}
