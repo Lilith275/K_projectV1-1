@@ -37,33 +37,38 @@ function backToLock() {
 
 // 3. App 启动与关闭 (带返回键联动)
 const backBtn = document.getElementById('global-back-btn');
-
+let currentIframeId = 'a'; // 记录当前使用的是哪个
 function launchApp(url) {
     const overlay = document.getElementById('app-overlay');
-    const frame = document.getElementById('app-frame');
-    const mask = document.getElementById('app-loader-mask');
     const backBtn = document.getElementById('global-back-btn');
+    
+    // 确定当前和后台的 iframe
+    const activeFrame = document.getElementById(`iframe-${currentIframeId}`);
+    const nextIframeId = currentIframeId === 'a' ? 'b' : 'a';
+    const nextFrame = document.getElementById(`iframe-${nextIframeId}`);
 
-    // 1. 如果是不同的 App，启动挡板
-    if (frame.getAttribute('data-current-src') !== url) {
-        mask.style.display = 'flex';   // 显示黑屏挡板
-        mask.style.opacity = '1';
-        frame.style.opacity = '0';     // 隐藏旧内容
-        frame.src = url;
-        frame.setAttribute('data-current-src', url); // 记录当前地址
+    // 1. 如果地址没变，直接开，不闪烁
+    if (nextFrame.getAttribute('data-src') === url || activeFrame.getAttribute('data-src') === url) {
+        overlay.classList.add('open');
+        backBtn.style.display = 'flex';
+        return;
     }
 
-    // 2. 展开 App 容器
-    overlay.classList.add('open');
-    backBtn.style.display = 'flex';
+    // 2. 在“后台”静默加载新 App
+    nextFrame.src = url;
+    nextFrame.setAttribute('data-src', url);
 
-    // 3. 核心修复：监听加载
-    // 手机端 onload 可能不准，我们加个保险
-    frame.onload = () => {
-        setTimeout(() => { // 给手机端浏览器 50ms 的渲染缓冲
-            frame.style.opacity = '1';
-            mask.style.opacity = '0';
-            setTimeout(() => { mask.style.display = 'none'; }, 300); // 彻底移除挡板
+    // 3. 核心：只有当后台 iframe 加载完成后，再执行切换动画
+    nextFrame.onload = () => {
+        // 先让 Overlay 出现 (如果还没开)
+        overlay.classList.add('open');
+        backBtn.style.display = 'flex';
+
+        // 稍微延迟 50ms 确保手机端绘制完成
+        setTimeout(() => {
+            activeFrame.classList.remove('active');
+            nextFrame.classList.add('active');
+            currentIframeId = nextIframeId; // 交换身份
         }, 50);
     };
 }
